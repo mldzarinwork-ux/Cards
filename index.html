@@ -1,0 +1,1365 @@
+```html
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <!-- ===== متاتگ‌های PWA ===== -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="مدیریت کارت" />
+    <meta name="application-name" content="مدیریت کارت" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#7f5af0" />
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIk1hbmFnZXIgQ2FydCIsCiAgInNob3J0X25hbWUiOiAiQ2FydCIsCiAgImRlc2NyaXB0aW9uIjogIk1hbmFnZXIgb2YgYmFuayBjYXJkcyIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjN2Y1YWYwIiwKICAidGhlbWVfY29sb3IiOiAiIzdmNWFmMCIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbCw8c3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgdmlld0JveD0nMCAwIDEwMCAxMDAnPjx0ZXh0IHg9JzUwJyB5PSc3MCcgZm9udC1mYW1pbHk9J3NhbnMtc2VyaWYnIGZvbnQtc2l6ZT0nNzAnIHRleHQtYW5jaG9yPSdtaWRkbGUnPvCfjI08L3RleHQ+PC9zdmc+IiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIiwKICAgICAgInB1cnBvc2UiOiAiYW55IgogICAgfQogIF0KfQ==" />
+    <title>مدیریت کارت‌های بانکی</title>
+
+    <!-- بارگذاری فونت فارسی شبنم -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/shabnam-font@v5.0.1/dist/font-face.css" />
+
+    <style>
+        /* ===== تمام استایل‌های قبلی (برای اختصار فقط بخش‌های کلیدی آورده شده) ===== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Shabnam', 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            min-height: 100vh;
+            padding: 18px 12px 60px;
+            transition: background .4s ease, color .4s ease;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        body.light {
+            background: linear-gradient(135deg, #eef0fa, #ffffff);
+            color: #17172a;
+        }
+        .app {
+            max-width: 720px;
+            margin: auto;
+        }
+        .head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+        .head h1 {
+            font-size: 20px;
+            margin: 0;
+            background: linear-gradient(135deg, #7f5af0, #2575fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 900;
+            font-family: 'Shabnam', sans-serif;
+        }
+        .head small {
+            color: #aaa;
+            font-size: 10px;
+            display: block;
+            font-weight: 300;
+            font-family: 'Shabnam', sans-serif;
+        }
+        .icon {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            cursor: pointer;
+            transition: all .3s ease;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Shabnam', sans-serif;
+        }
+        .icon:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(20deg);
+        }
+        body.light .icon {
+            color: #333;
+            border-color: rgba(0, 0, 0, 0.15);
+            background: #fff;
+        }
+        body.light .icon:hover {
+            background: #f0f0f0;
+        }
+        .toolbar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .search {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 13px;
+            padding: 9px 12px;
+            transition: all .3s ease;
+        }
+        .search:focus-within {
+            border-color: #7f5af0;
+            box-shadow: 0 0 20px rgba(127, 90, 240, 0.2);
+        }
+        body.light .search {
+            background: #ffffff;
+            border-color: rgba(0, 0, 0, 0.08);
+        }
+        .search input {
+            width: 100%;
+            border: 0;
+            outline: 0;
+            background: none;
+            color: #fff;
+            font-size: 13px;
+            padding: 0 8px;
+            font-weight: 400;
+            font-family: 'Shabnam', sans-serif;
+        }
+        body.light .search input {
+            color: #333;
+        }
+        .search input::placeholder {
+            color: #888;
+        }
+        .btn {
+            border: 0;
+            border-radius: 12px;
+            padding: 0 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all .3s ease;
+            font-size: 13px;
+            white-space: nowrap;
+            font-family: 'Shabnam', sans-serif;
+        }
+        .btn.primary {
+            background: linear-gradient(135deg, #7f5af0, #2575fc);
+            color: #fff;
+            padding: 0 18px;
+        }
+        .btn.primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px rgba(127, 90, 240, 0.4);
+        }
+        .btn.secondary {
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all .3s ease;
+            white-space: nowrap;
+            font-weight: 600;
+        }
+        body.light .btn.secondary {
+            background: #ffffff;
+            border-color: rgba(0, 0, 0, 0.08);
+            color: #333;
+        }
+        .btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        body.light .btn.secondary:hover {
+            background: #f0f0f0;
+        }
+        .toolbar-actions {
+            display: flex;
+            gap: 7px;
+            margin-bottom: 13px;
+            flex-wrap: wrap;
+        }
+        .form {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            padding: 0 14px;
+            margin-bottom: 14px;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all .4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+        .form.open {
+            max-height: 550px;
+            opacity: 1;
+            padding: 14px;
+        }
+        body.light .form {
+            background: #ffffff;
+            border-color: rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+        }
+        .form h2 {
+            font-size: 14px;
+            color: #c5b8ff;
+            margin: 0 0 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-family: 'Shabnam', sans-serif;
+        }
+        body.light .form h2 {
+            color: #7f5af0;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .field label {
+            display: block;
+            color: #aaa;
+            font-size: 10px;
+            margin: 0 2px 5px;
+            font-weight: 600;
+            font-family: 'Shabnam', sans-serif;
+        }
+        body.light .field label {
+            color: #666;
+        }
+        .field input {
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            border-radius: 10px;
+            padding: 9px 12px;
+            font-size: 13px;
+            outline: 0;
+            transition: all .3s ease;
+            font-weight: 500;
+            font-family: 'Shabnam', sans-serif;
+        }
+        body.light .field input {
+            background: #f5f5f5;
+            border-color: rgba(0, 0, 0, 0.08);
+            color: #333;
+        }
+        .field input:focus {
+            border-color: #7f5af0;
+            box-shadow: 0 0 15px rgba(127, 90, 240, 0.2);
+        }
+        .field input.ltr-input {
+            direction: ltr;
+            text-align: left;
+            font-family: 'Shabnam', sans-serif;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+        .field .hint {
+            color: #888;
+            font-size: 9px;
+            display: block;
+            margin-top: 4px;
+            font-weight: 300;
+            font-family: 'Shabnam', sans-serif;
+        }
+        .full {
+            grid-column: 1 / -1;
+        }
+        .form-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+        .save,
+        .cancel,
+        .delete-btn {
+            padding: 10px;
+            border-radius: 10px;
+            border: 0;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all .3s ease;
+            font-family: 'Shabnam', sans-serif;
+        }
+        .save {
+            flex: 1;
+            background: linear-gradient(135deg, #7f5af0, #2575fc);
+            color: #fff;
+        }
+        .save:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(127, 90, 240, 0.4);
+        }
+        .cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        body.light .cancel {
+            background: #f0f0f0;
+            color: #333;
+            border-color: rgba(0, 0, 0, 0.08);
+        }
+        .cancel:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        body.light .cancel:hover {
+            background: #e0e0e0;
+        }
+        .delete-btn {
+            background: #e74c3c;
+            color: #fff;
+            border: 0;
+            padding: 10px 16px;
+        }
+        .delete-btn:hover {
+            background: #c0392b;
+            transform: scale(1.02);
+        }
+        .list-head {
+            display: flex;
+            justify-content: space-between;
+            color: #aaa;
+            font-size: 10px;
+            margin: 5px 3px;
+            font-weight: 300;
+            font-family: 'Shabnam', sans-serif;
+        }
+        body.light .list-head {
+            color: #666;
+        }
+        .card {
+            position: relative;
+            min-height: 120px;
+            border-radius: 14px;
+            margin: 0 0 8px;
+            padding: 10px 14px;
+            color: #fff;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+            transition: all .3s ease;
+            cursor: default;
+            font-family: 'Shabnam', sans-serif;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+        .card::after {
+            content: "";
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            left: -50px;
+            top: -50px;
+        }
+        .card>* {
+            position: relative;
+            z-index: 1;
+        }
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .bank {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            font-family: 'Shabnam', sans-serif;
+        }
+        .actions {
+            display: flex;
+            gap: 3px;
+        }
+        .mini {
+            border: 0;
+            background: rgba(0, 0, 0, 0.2);
+            color: #fff;
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all .3s ease;
+            backdrop-filter: blur(4px);
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-family: 'Shabnam', sans-serif;
+        }
+        .mini:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.1);
+        }
+        .num {
+            direction: ltr;
+            text-align: center;
+            font-size: 18px;
+            letter-spacing: 3px;
+            font-weight: 800;
+            margin: 8px 0 6px;
+            padding: 4px;
+            font-family: 'Shabnam', sans-serif;
+            user-select: none;
+            cursor: pointer;
+            transition: all .2s ease;
+            border-radius: 6px;
+        }
+        .num:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .bottom small {
+            display: block;
+            font-size: 7px;
+            opacity: .7;
+            margin-bottom: 1px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-family: 'Shabnam', sans-serif;
+        }
+        .holder {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            font-family: 'Shabnam', sans-serif;
+        }
+        .expiry {
+            direction: ltr;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: 'Shabnam', sans-serif;
+            cursor: pointer;
+            transition: all .2s ease;
+            padding: 2px 6px;
+            border-radius: 4px;
+            letter-spacing: 1px;
+        }
+        .expiry:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .cvv {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: 'Shabnam', sans-serif;
+            background: rgba(0, 0, 0, 0.15);
+            padding: 2px 10px;
+            border-radius: 5px;
+            backdrop-filter: blur(4px);
+            cursor: pointer;
+            transition: all .2s ease;
+            letter-spacing: 1px;
+        }
+        .cvv:hover {
+            background: rgba(0, 0, 0, 0.3);
+        }
+        .cvv span {
+            font-weight: 700;
+            font-family: 'Shabnam', sans-serif;
+        }
+        .cvv .cvv-icon {
+            font-size: 11px;
+            opacity: .6;
+        }
+        .empty {
+            text-align: center;
+            padding: 30px 20px;
+            color: #aaa;
+            font-size: 12px;
+            font-weight: 300;
+            font-family: 'Shabnam', sans-serif;
+        }
+        .empty b {
+            display: block;
+            color: #fff;
+            font-size: 15px;
+            margin-bottom: 5px;
+            font-weight: 700;
+            font-family: 'Shabnam', sans-serif;
+        }
+        body.light .empty b {
+            color: #333;
+        }
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translate(-50%, 100px);
+            opacity: 0;
+            background: rgba(20, 20, 40, 0.95);
+            backdrop-filter: blur(8px);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 13px;
+            transition: all .4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            z-index: 20;
+            white-space: nowrap;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            font-weight: 500;
+            font-family: 'Shabnam', sans-serif;
+        }
+        .toast.show {
+            transform: translate(-50%, 0);
+            opacity: 1;
+        }
+        .toast.error {
+            background: rgba(200, 50, 50, 0.95);
+            border-color: #ff4444;
+        }
+        .toast #undoBtn {
+            border: 0;
+            background: none;
+            color: #7f5af0;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 0 4px;
+            font-family: 'Shabnam', sans-serif;
+        }
+        .toast #undoBtn:hover {
+            text-decoration: underline;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            z-index: 30;
+        }
+        .modal.show {
+            display: flex;
+            animation: fadeIn .3s ease;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .dialog {
+            max-width: 390px;
+            width: 100%;
+            background: #211d3b;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 17px;
+            padding: 20px;
+            animation: slideUp .3s ease;
+            font-family: 'Shabnam', sans-serif;
+        }
+        body.light .dialog {
+            background: #ffffff;
+            border-color: rgba(0, 0, 0, 0.08);
+        }
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .dialog h3 {
+            font-size: 16px;
+            margin: 0 0 10px;
+            color: #ff6b6b;
+            font-weight: 700;
+            font-family: 'Shabnam', sans-serif;
+        }
+        .dialog p {
+            font-size: 13px;
+            color: #aaa;
+            line-height: 1.8;
+            margin-bottom: 16px;
+            font-weight: 400;
+            font-family: 'Shabnam', sans-serif;
+        }
+        body.light .dialog p {
+            color: #666;
+        }
+        .dialog .actions {
+            display: flex;
+            gap: 8px;
+        }
+        .dialog button {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            cursor: pointer;
+            transition: all .3s ease;
+            font-weight: 700;
+            font-family: 'Shabnam', sans-serif;
+        }
+        body.light .dialog button {
+            background: #f5f5f5;
+            color: #333;
+            border-color: rgba(0, 0, 0, 0.08);
+        }
+        .dialog .danger {
+            background: #e74c3c;
+            border: 0;
+            color: #fff;
+        }
+        .dialog .danger:hover {
+            background: #c0392b;
+            transform: scale(1.05);
+        }
+        .dialog button:not(.danger):hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(1.05);
+        }
+        body.light .dialog button:not(.danger):hover {
+            background: #e8e8e8;
+        }
+        @media (max-width: 520px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .full {
+                grid-column: auto;
+            }
+            .num {
+                font-size: 16px;
+                letter-spacing: 2px;
+            }
+            .expiry {
+                font-size: 12px;
+            }
+            .cvv {
+                font-size: 12px;
+                padding: 2px 8px;
+            }
+            .head h1 {
+                font-size: 17px;
+            }
+            .card {
+                padding: 10px 12px;
+                min-height: 110px;
+            }
+            .toast {
+                font-size: 12px;
+                padding: 10px 16px;
+                white-space: normal;
+                max-width: 90%;
+            }
+            .form-actions {
+                flex-direction: column;
+            }
+            .toolbar-actions {
+                flex-direction: column;
+            }
+        }
+        @media (max-width: 380px) {
+            .toolbar {
+                flex-wrap: wrap;
+            }
+            .search {
+                min-width: 100%;
+            }
+        }
+
+        /* دکمه نصب مخصوص PWA */
+        .install-btn {
+            display: none;
+            background: #00a896;
+            color: #fff;
+            border: 0;
+            border-radius: 12px;
+            padding: 8px 14px;
+            font-weight: 700;
+            font-family: 'Shabnam', sans-serif;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all .3s ease;
+            margin-right: 6px;
+            white-space: nowrap;
+        }
+        .install-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px rgba(0, 168, 150, 0.4);
+        }
+        .install-btn.show {
+            display: inline-block;
+        }
+        body.light .install-btn {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- ===== هدر ===== -->
+        <header class="head">
+            <div>
+                <h1>💳 مدیریت کارت‌های بانکی</h1>
+                <small>🔒 مدیریت امن کارت‌ها</small>
+            </div>
+            <div style="display:flex; gap:6px; align-items:center;">
+                <button class="install-btn" id="installBtn">📲 نصب</button>
+                <button class="icon" id="themeBtn" aria-label="تغییر تم">🌓</button>
+            </div>
+        </header>
+
+        <!-- ===== نوار ابزار ===== -->
+        <div class="toolbar">
+            <div class="search">
+                <span>🔎</span>
+                <input id="searchInput" placeholder="جستجو در بانک یا صاحب حساب" />
+            </div>
+            <button class="btn primary" id="addBtn">➕ افزودن</button>
+        </div>
+
+        <!-- ===== دکمه‌های ابزار ===== -->
+        <div class="toolbar-actions">
+            <button class="btn secondary" id="backupBtn">💾 پشتیبان</button>
+            <button class="btn secondary" id="restoreBtn">📂 بازیابی</button>
+            <input id="fileInput" type="file" accept=".json,application/json" hidden />
+        </div>
+
+        <!-- ===== فرم ===== -->
+        <section class="form" id="formSection">
+            <h2 id="formTitle">✏️ افزودن کارت جدید</h2>
+            <div class="grid">
+                <div class="field full">
+                    <label>💳 شماره کارت</label>
+                    <input id="numberInput" class="ltr-input" inputmode="numeric" maxlength="19" placeholder="0000 0000 0000 0000" />
+                    <span class="hint">⚡ ۱۶ رقم معتبر</span>
+                </div>
+                <div class="field">
+                    <label>🏦 نام بانک</label>
+                    <input id="bankInput" list="banksList" placeholder="تشخیص خودکار" />
+                    <datalist id="banksList"></datalist>
+                </div>
+                <div class="field">
+                    <label>👤 صاحب حساب</label>
+                    <input id="holderInput" placeholder="نام و نام خانوادگی" />
+                </div>
+                <div class="field">
+                    <label>📅 تاریخ انقضا (ماه/سال)</label>
+                    <input id="expiryInput" class="ltr-input" inputmode="numeric" maxlength="5" placeholder="MM/YY" />
+                </div>
+                <div class="field">
+                    <label>🔐 CVV2</label>
+                    <input id="cvvInput" class="ltr-input" inputmode="numeric" maxlength="4" placeholder="۰۰۰" />
+                </div>
+            </div>
+            <div class="form-actions">
+                <button class="save" id="saveBtn">💾 ذخیره</button>
+                <button class="cancel" id="cancelBtn">✖ انصراف</button>
+                <button class="delete-btn" id="deleteFromFormBtn" style="display:none;">🗑 حذف کارت</button>
+            </div>
+        </section>
+
+        <!-- ===== لیست کارت‌ها ===== -->
+        <div class="list-head">
+            <span id="countLabel">۰ کارت</span>
+            <span id="resultLabel"></span>
+        </div>
+        <main id="cardsList"></main>
+    </div>
+
+    <!-- ===== پیغام‌ها ===== -->
+    <div class="toast" id="toast"></div>
+
+    <!-- ===== مودال حذف ===== -->
+    <div class="modal" id="modal">
+        <div class="dialog">
+            <h3>⚠️ حذف کارت</h3>
+            <p id="modalText">آیا از حذف این کارت مطمئن هستید؟</p>
+            <div class="actions">
+                <button id="modalNo">❌ انصراف</button>
+                <button class="danger" id="modalYes">🗑 حذف</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ================================================================
+        //  PWA - Service Worker Registration (ساده و قابل اطمینان)
+        // ================================================================
+        if ('serviceWorker' in navigator) {
+            // ساخت یک سرویس‌ورکر با کدهای ساده به صورت Blob
+            const swCode = `
+                self.addEventListener('install', function(e) {
+                    e.waitUntil(
+                        caches.open('bank-cards-v1').then(function(cache) {
+                            return cache.addAll([
+                                '/',
+                                '/index.html'
+                            ]);
+                        })
+                    );
+                });
+                self.addEventListener('fetch', function(e) {
+                    e.respondWith(
+                        caches.match(e.request).then(function(response) {
+                            return response || fetch(e.request);
+                        })
+                    );
+                });
+            `;
+            try {
+                const blob = new Blob([swCode], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+                navigator.serviceWorker.register(swUrl, { scope: '/' })
+                    .then(function(reg) {
+                        console.log('✅ Service Worker ثبت شد');
+                    })
+                    .catch(function(err) {
+                        console.log('❌ خطا در ثبت Service Worker:', err);
+                    });
+            } catch (e) {
+                console.log('❌ خطا در ساخت Service Worker:', e);
+            }
+        }
+
+        // ================================================================
+        //  دکمه نصب PWA (فقط در مرورگرهای پشتیبان)
+        // ================================================================
+        let deferredPrompt = null;
+        const installBtn = document.getElementById('installBtn');
+
+        window.addEventListener('beforeinstallprompt', function(e) {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.classList.add('show');
+        });
+
+        installBtn.addEventListener('click', async function() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const result = await deferredPrompt.userChoice;
+                if (result.outcome === 'accepted') {
+                    console.log('✅ نصب پذیرفته شد');
+                    installBtn.classList.remove('show');
+                } else {
+                    console.log('❌ نصب رد شد');
+                }
+                deferredPrompt = null;
+            } else {
+                alert('برای نصب، از گزینه "افزودن به صفحه اصلی" در منوی مرورگر استفاده کنید.');
+            }
+        });
+
+        window.addEventListener('appinstalled', function() {
+            console.log('✅ برنامه نصب شد');
+            installBtn.classList.remove('show');
+        });
+
+        // ================================================================
+        //  برنامه اصلی مدیریت کارت (همانند قبل)
+        // ================================================================
+        (function() {
+            'use strict';
+
+            let cards = [];
+            let editId = null;
+            let deleteId = null;
+            let undoCard = null;
+            const STORAGE_KEY = 'bank_cards_data';
+
+            const BANKS_DB = {
+                'بانک ملی ایران': ['603799', '170019'],
+                'بانک ملت': ['610433', '991975'],
+                'بانک صادرات ایران': ['603769', '207177'],
+                'بانک تجارت': ['585983', '627353'],
+                'بانک سپه': ['589210'],
+                'بانک کشاورزی': ['603770'],
+                'بانک مسکن': ['628023'],
+                'بانک رفاه کارگران': ['589463'],
+                'بانک پارسیان': ['622106', '639194'],
+                'بانک پاسارگاد': ['502229', '639347'],
+                'بانک سامان': ['621986'],
+                'بانک اقتصاد نوین': ['627412'],
+                'بانک سینا': ['639346'],
+                'بانک شهر': ['502806', '504706'],
+                'بانک دی': ['502938'],
+                'بانک آینده': ['636214'],
+                'بانک کارآفرین': ['627488'],
+                'بانک گردشگری': ['505416'],
+                'بانک ایران زمین': ['505785'],
+                'بانک انصار': ['627381'],
+                'پست بانک ایران': ['627760'],
+                'موسسه اعتباری ملل': ['606256'],
+                'بانک خاورمیانه': ['585949'],
+                'بانک صنعت و معدن': ['627961'],
+                'بانک توسعه تعاون': ['502908'],
+                'بانک قرض الحسنه مهر ایران': ['606373'],
+                'بانک سرمایه': ['639607']
+            };
+
+            const COLORS_DB = {
+                'بانک ملی ایران': '#08734f',
+                'بانک ملت': '#d51f2b',
+                'بانک صادرات ایران': '#f28a19',
+                'بانک تجارت': '#07539a',
+                'بانک سپه': '#087341',
+                'بانک پارسیان': '#7a24a8',
+                'بانک پاسارگاد': '#008996',
+                'بانک سامان': '#1464c2',
+                'بانک شهر': '#d99a00',
+                'بانک رفاه کارگران': '#c92e35'
+            };
+
+            function $(id) { return document.getElementById(id); }
+
+            function toEnglishDigits(s) {
+                return String(s || '').replace(/[۰-۹]/g, function(d) { return '0123456789'['۰۱۲۳۴۵۶۷۸۹'.indexOf(d)]; }).replace(/\D/g, '');
+            }
+
+            function escapeHTML(s) {
+                if (s == null) return '';
+                var d = document.createElement('div');
+                d.textContent = s;
+                return d.innerHTML;
+            }
+
+            function generateId() {
+                return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+            }
+
+            function isValidLuhn(n) {
+                var sum = 0,
+                    alt = false;
+                for (var i = n.length - 1; i >= 0; i--) {
+                    var d = +n[i];
+                    if (alt && (d *= 2) > 9) d -= 9;
+                    sum += d;
+                    alt = !alt;
+                }
+                return sum % 10 === 0;
+            }
+
+            function detectBank(n) {
+                n = toEnglishDigits(n);
+                for (var b in BANKS_DB) {
+                    if (BANKS_DB[b].some(function(p) { return n.startsWith(p); })) return b;
+                }
+                return '';
+            }
+
+            function formatNumber(n) {
+                return toEnglishDigits(n).slice(0, 16).replace(/(.{4})/g, '$1 ').trim();
+            }
+
+            function formatExpiry(x) {
+                var v = toEnglishDigits(x).slice(0, 4);
+                if (v.length === 0) return '';
+                if (v.length <= 2) return v;
+                return v.slice(0, 2) + '/' + v.slice(2);
+            }
+
+            function getColor(bank) {
+                if (COLORS_DB[bank]) return COLORS_DB[bank];
+                var h = 0;
+                for (var i = 0; i < bank.length; i++) h = (h * 31 + bank.charCodeAt(i)) | 0;
+                var colors = ['#7f5af0', '#2575fc', '#00a896', '#d05ce3', '#e08b20', '#b23a48'];
+                return colors[Math.abs(h) % colors.length];
+            }
+
+            function saveData() {
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(cards));
+                } catch (e) {
+                    showToast('❌ خطا در ذخیره‌سازی', true);
+                }
+            }
+
+            function loadData() {
+                try {
+                    var raw = localStorage.getItem(STORAGE_KEY);
+                    cards = raw ? JSON.parse(raw) : [];
+                } catch (e) {
+                    cards = [];
+                }
+                cards = Array.isArray(cards) ? cards : [];
+                renderCards();
+            }
+
+            function showToast(msg, isError) {
+                if (isError === undefined) isError = false;
+                var t = $('toast');
+                t.innerHTML = msg;
+                t.className = 'toast show' + (isError ? ' error' : '');
+                clearTimeout(t._timer);
+                t._timer = setTimeout(function() { t.className = 'toast'; }, 3000);
+            }
+
+            function openForm(card) {
+                if (card === undefined) card = null;
+                editId = card?.id || null;
+                $('formTitle').textContent = card ? '✏️ ویرایش کارت' : '➕ افزودن کارت جدید';
+                $('numberInput').value = card ? formatNumber(card.number) : '';
+                $('bankInput').value = card?.bank || '';
+                $('holderInput').value = card?.holder || '';
+                $('expiryInput').value = card?.expiry || '';
+                $('cvvInput').value = card?.cvv || '';
+
+                var deleteBtn = $('deleteFromFormBtn');
+                if (card) {
+                    deleteBtn.style.display = 'block';
+                    deleteBtn.dataset.id = card.id;
+                } else {
+                    deleteBtn.style.display = 'none';
+                    deleteBtn.dataset.id = '';
+                }
+
+                $('formSection').classList.add('open');
+                setTimeout(function() { $('numberInput').focus(); }, 150);
+            }
+
+            function closeForm() {
+                editId = null;
+                $('formSection').classList.remove('open');
+                $('deleteFromFormBtn').style.display = 'none';
+            }
+
+            function copyToClipboard(text, label) {
+                if (!text || text === '—' || text === '') {
+                    showToast('⚠️ چیزی برای کپی وجود ندارد', true);
+                    return;
+                }
+                var cleanText = text.replace(/\s/g, '');
+                var copyText = cleanText || text;
+
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(copyText).then(function() {
+                        showToast('✅ ' + label + ' کپی شد');
+                    }).catch(function() {
+                        fallbackCopy(copyText, label);
+                    });
+                } else {
+                    fallbackCopy(copyText, label);
+                }
+            }
+
+            function fallbackCopy(text, label) {
+                var ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                try {
+                    document.execCommand('copy');
+                    showToast('✅ ' + label + ' کپی شد');
+                } catch (e) {
+                    showToast('❌ کپی ناموفق', true);
+                }
+                ta.remove();
+            }
+
+            function saveCard() {
+                var rawNum = toEnglishDigits($('numberInput').value);
+                var num = rawNum.slice(0, 16);
+                var bank = $('bankInput').value.trim() || detectBank(num);
+                var holder = $('holderInput').value.trim();
+                var expiry = formatExpiry($('expiryInput').value);
+                var cv = toEnglishDigits($('cvvInput').value).slice(0, 4);
+
+                if (num.length !== 16) {
+                    showToast('❌ شماره کارت باید ۱۶ رقم باشد', true);
+                    return;
+                }
+                if (!isValidLuhn(num)) {
+                    showToast('❌ شماره کارت معتبر نیست', true);
+                    return;
+                }
+                if (cards.some(function(c) { return toEnglishDigits(c.number) === num && c.id !== editId; })) {
+                    showToast('⚠️ این شماره کارت قبلاً ثبت شده است', true);
+                    return;
+                }
+
+                var old = cards.find(function(c) { return c.id === editId; });
+                var newCard = {
+                    id: editId || generateId(),
+                    bank: bank || 'بانک نامشخص',
+                    holder: holder || 'بدون نام',
+                    number: num,
+                    expiry: expiry || '—',
+                    cvv: cv || '—',
+                    created: old?.created || Date.now(),
+                    updated: Date.now()
+                };
+
+                if (old) {
+                    cards = cards.map(function(c) { return c.id === editId ? newCard : c; });
+                } else {
+                    cards = [newCard].concat(cards);
+                }
+
+                saveData();
+                closeForm();
+                renderCards();
+                showToast(old ? '✅ کارت ویرایش شد' : '✅ کارت با موفقیت اضافه شد');
+            }
+
+            function deleteCardFromForm() {
+                var btn = $('deleteFromFormBtn');
+                var id = btn.dataset.id;
+                if (!id) return;
+                deleteId = id;
+                var card = cards.find(function(c) { return c.id === id; });
+                if (!card) return;
+                $('modalText').textContent = 'آیا از حذف کارت ' + escapeHTML(card.bank) + ' با شماره ' + formatNumber(card.number) +
+                    ' مطمئن هستید؟';
+                $('modal').classList.add('show');
+            }
+
+            function confirmDelete() {
+                var card = cards.find(function(c) { return c.id === deleteId; });
+                if (!card) return;
+
+                $('modal').classList.remove('show');
+                cards = cards.filter(function(c) { return c.id !== deleteId; });
+                undoCard = card;
+                saveData();
+                closeForm();
+                renderCards();
+
+                var t = $('toast');
+                t.innerHTML = '🗑 کارت ' + escapeHTML(card.bank) + ' حذف شد — <button id="undoBtn">↩ بازگردانی</button>';
+                t.className = 'toast show';
+
+                var undoBtn = document.getElementById('undoBtn');
+                undoBtn.onclick = function() {
+                    cards.unshift(undoCard);
+                    undoCard = null;
+                    saveData();
+                    renderCards();
+                    showToast('✅ کارت بازگردانی شد');
+                };
+
+                clearTimeout(confirmDelete._timer);
+                confirmDelete._timer = setTimeout(function() {
+                    undoCard = null;
+                    t.className = 'toast';
+                }, 5000);
+            }
+
+            function renderCards() {
+                var query = $('searchInput').value.trim().toLowerCase();
+
+                var filtered = cards.filter(function(c) {
+                    return !query || [c.bank, c.holder, c.number].join(' ').toLowerCase().includes(query);
+                });
+
+                filtered.sort(function(a, b) { return b.created - a.created; });
+
+                $('countLabel').textContent = cards.length + ' کارت';
+                $('resultLabel').textContent = query ? filtered.length + ' نتیجه' : '';
+
+                var list = $('cardsList');
+                if (filtered.length === 0) {
+                    list.innerHTML =
+                        '<div class="empty"><b>' + (cards.length ? '🔍 نتیجه‌ای پیدا نشد' : '💳 هنوز کارتی اضافه نکرده‌اید') +
+                        '</b>' + (cards.length ? 'جستجو را تغییر دهید' :
+                            'روی دکمه "افزودن" کلیک کنید تا اولین کارت خود را ثبت کنید') + '</div>';
+                    return;
+                }
+
+                list.innerHTML = filtered.map(function(card) {
+                    var color = getColor(card.bank);
+                    var cleanNumber = toEnglishDigits(card.number);
+                    var cleanExpiry = card.expiry && card.expiry !== '—' ? card.expiry.replace('/', '') : '';
+                    var cleanCvv = card.cvv && card.cvv !== '—' ? toEnglishDigits(card.cvv) : '';
+
+                    return (
+                        '<article class="card" style="background:linear-gradient(135deg, ' + color + ', #17152d)" ondblclick="window.editCardHandler(\'' +
+                        card.id + '\')">' +
+                        '<div class="top">' +
+                        '<span class="bank">' + escapeHTML(card.bank || 'بانک نامشخص') + '</span>' +
+                        '<div class="actions">' +
+                        '<button class="mini" onclick="window.editCardHandler(\'' + card.id + '\')" title="ویرایش">✎</button>' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="num" onclick="window.copyNumberHandler(\'' + cleanNumber + '\')" title="کلیک برای کپی شماره کارت">' +
+                        formatNumber(card.number) +
+                        '</div>' +
+                        '<div class="bottom">' +
+                        '<div><small>👤 صاحب کارت</small><div class="holder">' + escapeHTML(card.holder || 'بدون نام') +
+                        '</div></div>' +
+                        '<div><small>📅 انقضا</small><div class="expiry" onclick="window.copyExpiryHandler(\'' + cleanExpiry +
+                        '\')" title="کلیک برای کپی تاریخ انقضا">' + escapeHTML(card.expiry || '—') + '</div></div>' +
+                        '<div class="cvv" onclick="window.copyCvvHandler(\'' + cleanCvv +
+                        '\')" title="کلیک برای کپی CVV">' +
+                        '<span class="cvv-icon">🔐</span>' +
+                        '<span>' + escapeHTML(card.cvv || '—') + '</span>' +
+                        '</div>' +
+                        '</div>' +
+                        '</article>'
+                    );
+                }).join('');
+            }
+
+            window.editCardHandler = function(id) {
+                var card = cards.find(function(c) { return c.id === id; });
+                if (card) openForm(card);
+            };
+
+            window.copyNumberHandler = function(num) {
+                copyToClipboard(num, 'شماره کارت');
+            };
+            window.copyExpiryHandler = function(expiry) {
+                copyToClipboard(expiry, 'تاریخ انقضا');
+            };
+            window.copyCvvHandler = function(cvv) {
+                copyToClipboard(cvv, 'CVV2');
+            };
+
+            function exportBackup() {
+                var data = { version: '1.0', exportedAt: new Date().toISOString(), cards: cards };
+                var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                var url = URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.href = url;
+                a.download = 'bank-cards-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(function() { URL.revokeObjectURL(url); }, 1000);
+                showToast('✅ پشتیبان با موفقیت ساخته شد');
+            }
+
+            function importBackup(file) {
+                if (!file) return;
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        var data = JSON.parse(e.target.result);
+                        var imported = data.cards || data;
+                        if (!Array.isArray(imported)) throw new Error('فرمت نامعتبر');
+
+                        imported = imported.map(function(c) {
+                            return {
+                                id: c.id || generateId(),
+                                bank: c.bank || 'بانک نامشخص',
+                                holder: c.holder || 'بدون نام',
+                                number: toEnglishDigits(c.number),
+                                expiry: c.expiry || '—',
+                                cvv: c.cvv || '—',
+                                created: c.created || Date.now(),
+                                updated: Date.now()
+                            };
+                        });
+
+                        var existingNumbers = new Set(cards.map(function(c) { return toEnglishDigits(c.number); }));
+                        var newCards = imported.filter(function(c) { return !existingNumbers.has(toEnglishDigits(c
+                            .number)); });
+
+                        if (newCards.length === 0) {
+                            showToast('⚠️ هیچ کارت جدیدی برای افزودن وجود ندارد', true);
+                            return;
+                        }
+
+                        cards = newCards.concat(cards);
+                        saveData();
+                        renderCards();
+                        showToast('✅ ' + newCards.length + ' کارت با موفقیت بازیابی شد');
+                    } catch (err) {
+                        showToast('❌ فایل پشتیبان معتبر نیست', true);
+                    }
+                };
+                reader.readAsText(file);
+                $('fileInput').value = '';
+            }
+
+            function init() {
+                loadData();
+
+                $('searchInput').addEventListener('input', renderCards);
+                $('addBtn').addEventListener('click', function() { openForm(); });
+                $('saveBtn').addEventListener('click', saveCard);
+                $('cancelBtn').addEventListener('click', closeForm);
+                $('deleteFromFormBtn').addEventListener('click', deleteCardFromForm);
+
+                $('numberInput').addEventListener('input', function(e) {
+                    var val = e.target.value;
+                    var formatted = formatNumber(val);
+                    if (formatted !== val) e.target.value = formatted;
+                    var detected = detectBank(formatted);
+                    if (detected && !$('bankInput').value) {
+                        $('bankInput').value = detected;
+                    }
+                });
+
+                $('expiryInput').addEventListener('input', function(e) {
+                    var val = e.target.value;
+                    var formatted = formatExpiry(val);
+                    if (formatted !== val) e.target.value = formatted;
+                });
+
+                $('backupBtn').addEventListener('click', exportBackup);
+                $('restoreBtn').addEventListener('click', function() { $('fileInput').click(); });
+                $('fileInput').addEventListener('change', function(e) {
+                    if (this.files.length) importBackup(this.files[0]);
+                });
+
+                $('modalNo').addEventListener('click', function() { $('modal').classList.remove('show'); });
+                $('modalYes').addEventListener('click', confirmDelete);
+
+                $('themeBtn').addEventListener('click', function() {
+                    document.body.classList.toggle('light');
+                    this.textContent = document.body.classList.contains('light') ? '☀️' : '🌓';
+                });
+
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') {
+                        if ($('modal').classList.contains('show')) {
+                            $('modal').classList.remove('show');
+                        } else {
+                            closeForm();
+                        }
+                    }
+                    if (e.key === 'Enter' && $('formSection').classList.contains('open')) {
+                        saveCard();
+                    }
+                });
+
+                console.log('💳 مدیریت کارت‌های بانکی با موفقیت راه‌اندازی شد');
+                console.log('📱 برای نصب مثل اپلیکیشن، روی دکمه "نصب" یا گزینه "افزودن به صفحه اصلی" کلیک کنید.');
+            }
+
+            if (document.readyState === 'complete') {
+                init();
+            } else {
+                window.addEventListener('load', init);
+            }
+
+        })();
+    </script>
+</body>
+</html>
+```
